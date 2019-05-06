@@ -1,0 +1,29 @@
+{
+  "name": "aws-ripper-action",
+  "version": "1.0.0",
+  "description": "GitHub Actions to clean up old AWS instances",
+  "main": "entrypoint.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node entrypoint.js > test.md"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/helaili/aws-ripper-action.git"
+  },
+  "keywords": [
+    "github-action",
+    "action",
+    "aws"
+  ],
+  "author": "Alain Hélaïli",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/helaili/aws-ripper-action/issues"
+  },
+  "homepage": "https://github.com/helaili/aws-ripper-action",
+  "dependencies": {
+    "actions-toolkit": "2.0.0",
+    "aws-sdk": "^2.392.0"
+  }
+}
