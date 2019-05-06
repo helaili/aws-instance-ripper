@@ -14,6 +14,7 @@ LABEL homepage="https://github.com/helaili/aws-instance-tag-analyzer"
 LABEL maintainer="Alain Hélaïli <helaili@github.com>"
 
 ADD package.json /package.json
+ADD package-lock.json /package-lock.json
 WORKDIR /
 
 RUN npm ci
