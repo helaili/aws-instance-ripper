@@ -9,8 +9,8 @@ LABEL "com.github.actions.icon"="cloud-lightning"
 LABEL "com.github.actions.color"="red"
 
 LABEL version="1.0.0"
-LABEL repository="https://github.com/helaili/aws-ripper-action"
-LABEL homepage="https://github.com/helaili/aws-ripper-action"
+LABEL repository="https://github.com/helaili/aws-instance-tag-analyzer"
+LABEL homepage="https://github.com/helaili/aws-instance-tag-analyzer"
 LABEL maintainer="Alain Hélaïli <helaili@github.com>"
 
 ADD package.json /package.json
