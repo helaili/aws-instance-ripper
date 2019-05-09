@@ -1,7 +1,7 @@
 {
-  "name": "aws-instance-tag-analyzer",
+  "name": "aws-instance-ripper",
   "version": "1.0.0",
-  "description": "GitHub Actions to clean up old AWS instances",
+  "description": "GitHub Actions to clean up AWS instances",
   "main": "entrypoint.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/helaili/aws-instance-tag-analyzer.git"
+    "url": "https://github.com/helaili/aws-instance-ripper.git"
   },
   "keywords": [
     "github-action",
@@ -19,9 +19,9 @@
   "author": "Alain Hélaïli",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/helaili/aws-instance-tag-analyzer/issues"
+    "url": "https://github.com/helaili/aws-instance-ripper/issues"
   },
-  "homepage": "https://github.com/helaili/aws-instance-tag-analyzer",
+  "homepage": "https://github.com/helaili/aws-instance-ripper",
   "dependencies": {
     "actions-toolkit": "2.0.0",
     "aws-sdk": "^2.392.0"
