@@ -7,7 +7,10 @@ const NOTICE_PERIOD_IN_DAYS = 14
 const STOP_GRACE_DAYS = 21
 const TERMINATE_GRACE_DAYS = 35
 
-let _dryRun = process.env.DRY_RUN || false
+let _dryRun = process.env.DRY_RUN && process.env.DRY_RUN.toUpperCase() === 'TRUE'
+if (_dryRun) {
+  console.log('Dry Run mode is ON')
+}
 
 let ec2Config = { region: 'us-east-1'}
 let ec2Global = new AWS.EC2(ec2Config)
@@ -29,7 +32,6 @@ let _newStopDateStr = _newStopDate.toISOString().slice(0, 10)
  * Main loop - Going through each region and retrieving all instances
  *
  *********************************************************************/
-
 
 ec2Global.describeRegions({}, (regionsErr, regions) => {
   if (regionsErr) {
