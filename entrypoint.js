@@ -3,9 +3,14 @@ const AWS = require('aws-sdk')
 const { Toolkit } = require('actions-toolkit')
 const tools = new Toolkit()
 
-const NOTICE_PERIOD_IN_DAYS = 14
-const STOP_GRACE_DAYS = 21
-const TERMINATE_GRACE_DAYS = 35
+const NOTICE_PERIOD_DAYS = parseInt(process.env.NOTICE_PERIOD_DAYS ? process.env.NOTICE_PERIOD_DAYS : 14, 10)
+const STOP_GRACE_DAYS = parseInt(process.env.STOP_GRACE_DAYS ? process.env.STOP_GRACE_DAYS : 21, 10)
+const TERMINATE_GRACE_DAYS = parseInt(process.env.TERMINATE_GRACE_DAYS ? process.env.TERMINATE_GRACE_DAYS : 35, 10)
+
+console.log('Using these settings:')
+console.log(`Notice period: ${NOTICE_PERIOD_DAYS} days`)
+console.log(`Grace period for stopping: ${STOP_GRACE_DAYS} days`)
+console.log(`Grace period for terminating: ${TERMINATE_GRACE_DAYS} days`)
 
 let _dryRun = process.env.DRY_RUN && process.env.DRY_RUN.toUpperCase() === 'TRUE'
 if (_dryRun) {
@@ -17,7 +22,7 @@ let ec2Global = new AWS.EC2(ec2Config)
 
 let _now = new Date()
 let _noticePeriod = new Date()
-_noticePeriod.setDate(_noticePeriod.getDate() + NOTICE_PERIOD_IN_DAYS)
+_noticePeriod.setDate(_noticePeriod.getDate() + NOTICE_PERIOD_DAYS)
 
 let _newTerminateDate = new Date()
 _newTerminateDate.setDate(_now.getDate() + TERMINATE_GRACE_DAYS)
