@@ -20,6 +20,9 @@ This action can be complemented by [aws-instance-ripper-issue-reporter](https://
 
 ## Environment variable
 `DRY_RUN`: if set to `true` (case insensitive), no action will take place on your AWS account. Look at you action log to see the simulated outcome of this process.
+
 `NOTICE_PERIOD_DAYS`: threshold before stop or terminate date to start reporting the instance. Defaults to 14 days.
+
 `STOP_GRACE_DAYS`: instances without a stop date will be have a stop date set to this many days in the future. Defaults to 21 days.
+
 `TERMINATE_GRACE_DAYS`: instances without a terminate date will be have a terminations date set to this many days in the future. Defaults to 35 days.
