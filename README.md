@@ -14,5 +14,10 @@ Instances are also reported when reaching 14 days of their stop date or terminat
 
 This action can be complemented by [aws-instance-ripper-issue-reporter](https://github.com/helaili/aws-instance-ripper-issue-reporter) which print this action report as a GitHub issue comment. 
 
+## Secrets
+`AWS_SECRET_ACCESS_KEY`
+`AWS_ACCESS_KEY_ID`
 
+## Environment variable
+`DRY_RUN`: if set to `true` (case insensitive), no action will take place on your AWS account. Look at you action log to see the simulated outcome of this process. 
 
