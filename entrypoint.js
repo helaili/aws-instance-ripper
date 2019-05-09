@@ -7,7 +7,7 @@ const NOTICE_PERIOD_IN_DAYS = 14
 const STOP_GRACE_DAYS = 21
 const TERMINATE_GRACE_DAYS = 35
 
-let _dryRun = true
+let _dryRun = process.env.DRY_RUN || false
 
 let ec2Config = { region: 'us-east-1'}
 let ec2Global = new AWS.EC2(ec2Config)
