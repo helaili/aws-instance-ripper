@@ -88,6 +88,8 @@ try {
     }
   })
 
+  core.debug(`Reporting: ${JSON.stringify(reportData)}`)
+
   /* 
   core.setOutput('instancesWithMissingLabel', '')
   core.setOutput('instancesToStop', '')
