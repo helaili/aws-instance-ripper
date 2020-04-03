@@ -64,7 +64,9 @@ try {
                     reportData[region.RegionName] = []
                   }
                   reportData[region.RegionName].push(reportedInstance)
-                  
+                  // Keep updating the output paramater
+                  core.setOutput('report', JSON.stringify(reportData))
+
                   if (reportedInstance.terminate.now) {
                     // Let's terminate this one
                     terminateInstance(ec2Regional, reportedInstance, dryRun)
@@ -87,20 +89,13 @@ try {
       })
     }
   })
-
-  core.debug(`Reporting: ${JSON.stringify(reportData)}`)
-
-  /* 
-  core.setOutput('instancesWithMissingLabel', '')
-  core.setOutput('instancesToStop', '')
-  core.setOutput('instancesToStopSoon', '')
-  core.setOutput('instancesToTerminate', '')
-  core.setOutput('instancesToTerminateSoon', '')
-  */
 } catch (error) {
   core.setFailed(error.message);
 }
 
+/*
+ * Update the instance tags
+ */
 function updateTags(ec2Client, reportedInstance, dryRun) {
   const tagData = {
     Resources: [
