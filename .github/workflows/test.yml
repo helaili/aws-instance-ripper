@@ -14,3 +14,5 @@ jobs:
       with:
         AWSAccessKeyID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWSSecretAccessKey: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        defaultStopDelay: 21
+        defaultTerminateDelay: 28

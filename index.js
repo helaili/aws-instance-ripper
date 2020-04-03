@@ -7,9 +7,16 @@ try {
   const defaultTerminateDelay = core.getInput('defaultTerminateDelay')
   const AWSAccessKeyID = core.getInput('AWSAccessKeyID')
   const AWSSecretAccessKey = core.getInput('AWSSecretAccessKey')
-  
 
-  core.debug(`Inside try block ${AWSAccessKeyID}`);
+  core.debug(`defaultNotificationDelay: ${defaultNotificationDelay}`)
+  core.debug(`defaultStopDelay: ${defaultStopDelay}`)
+  core.debug(`defaultTerminateDelay: ${defaultTerminateDelay}`)
+
+  if (AWSAccessKeyID) {
+    core.debug(`Found it ${AWSAccessKeyID}`)
+  } else {
+    core.debug('Not found')
+  }
 
   /* 
   core.setOutput('instancesWithMissingLabel', '')

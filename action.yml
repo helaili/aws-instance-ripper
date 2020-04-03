@@ -4,7 +4,7 @@ inputs:
   defaultNotificationDelay:  
     description: 'Start warning about stopping when the date is close enough'
     required: true
-    default: '21'
+    default: '15'
   defaultStopDelay:  
     description: 'When Stop is not provided, how many days in the future should this value be set to'
     required: false
