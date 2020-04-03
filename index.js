@@ -1,5 +1,6 @@
 const core = require('@actions/core')
 const AWS = require('aws-sdk')
+const ripper = require('./ripper')
 
 try {
   const defaultNotificationDelay = core.getInput('defaultNotificationDelay')
@@ -20,13 +21,38 @@ try {
   let ec2Global = new AWS.EC2(ec2Config)
 
   /*
-   * Looping through all the regions 
+   * Get all the regions 
    */
   ec2Global.describeRegions({}, (regionsErr, regions) => {
     if (regionsErr) {
       core.setFailed(regionsErr)
     } else {
-      core.debug(`Retrieved the following regions: ${regions}`)
+      core.debug(`Retrieved ${regions.length} AWS regions`)
+
+      /*
+       * Now iterating through each region
+       */
+      regions.Regions.forEach(region => {
+        ec2Config.region = region.RegionName
+        let ec2Regional = new AWS.EC2(ec2Config)
+        
+        /*
+         * Get the instances in the region 
+         */
+        ec2Regional.describeInstances({}, (instancesErr, instances) => {
+          if (instancesErr) {
+            core.error(`Couldn't retrieve instances from AWS region ${region.RegionName}`)
+          } else {
+            // You think you're getting instances but it's really Reservations. 
+            instances.Reservations.forEach(reservation => {
+              // Reservations can hold serveral instances 
+              reservation.Instances.forEach(instance => {
+                ripper.processInstance(instance)
+              })
+            })  
+          }
+        })
+      })
     }
   })
 
