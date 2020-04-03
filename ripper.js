@@ -49,6 +49,17 @@ function processInstance (instance, ripperConfig) {
       core.debug(`Terminate now set to ${tag.Value}`)
     } 
   } 
+
+  // Terminate date was origininally set or got set with the default termination date
+  if (isDateSet(reportData.terminate.value)) {
+    if (moment(reportData.terminate.value).isSameOrAfter(moment(), 'day')) {
+      reportInstance = true
+      reportData.terminate.now = true
+    } else if (moment(reportData.terminate.value).substract(ripperConfig.defaultNotificationDelay).isBefore(moment(), 'day')) {
+      reportInstance = true
+      reportData.terminate.warning = true
+    }
+  }
   
   if (!isDateSet(reportData.stop.value)) {
     core.debug(`Stop date not set`)
@@ -64,6 +75,17 @@ function processInstance (instance, ripperConfig) {
       tags.push(tag)
       reportData.stop.value = tag.Value
       core.debug(`Stop now set to ${tag.Value}`)
+    }
+  }
+
+   // Stop date was origininally set or got set with the default stop date
+   if (isDateSet(reportData.stop.value)) {
+    if (moment(reportData.stop.value).isSameOrAfter(moment(), 'day')) {
+      reportInstance = true
+      reportData.stop.now = true
+    } else if (moment(reportData.stop.value).substract(ripperConfig.defaultNotificationDelay).isBefore(moment(), 'day')) {
+      reportInstance = true
+      reportData.stop.warning = true
     }
   }
 
