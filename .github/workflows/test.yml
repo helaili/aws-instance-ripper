@@ -1,0 +1,16 @@
+name: Test
+
+on:
+  push
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: AWS Ripper
+      uses: ./
+      with:
+        AWSAccessKeyID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWSSecretAccessKey: ${{ secrets.AWS_SECRET_ACCESS_KEY }}

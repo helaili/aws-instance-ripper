@@ -1,11 +1,11 @@
 {
   "name": "aws-instance-ripper",
-  "version": "1.0.0",
-  "description": "GitHub Actions to clean up AWS instances",
-  "main": "entrypoint.js",
+  "version": "2.0.0",
+  "description": "Keep your AWS usage under control",
+  "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node entrypoint.js > test.md"
+    "test": "act -s AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY",
+    "start": "node index.js > test.md"
   },
   "repository": {
     "type": "git",
@@ -13,7 +13,7 @@
   },
   "keywords": [
     "github-action",
-    "action",
+    "actions",
     "aws"
   ],
   "author": "Alain Hélaïli",
@@ -23,7 +23,8 @@
   },
   "homepage": "https://github.com/helaili/aws-instance-ripper",
   "dependencies": {
-    "actions-toolkit": "2.0.0",
+    "@actions/core": "^1.2.3",
+    "@actions/github": "^2.1.1",
     "aws-sdk": "^2.392.0"
   }
 }

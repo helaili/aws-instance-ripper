@@ -1,0 +1,33 @@
+name: 'AWS Instance Ripper'
+description: 'Keep your AWS usage under control'
+inputs:
+  defaultNotificationDelay:  
+    description: 'Start warning about stopping when the date is close enough'
+    required: true
+    default: '21'
+  defaultStopDelay:  
+    description: 'When Stop is not provided, how many days in the future should this value be set to'
+    required: false
+  defaultTerminateDelay:  
+    description: 'When Terminate is not provided, how many days in the future should this value be set to'
+    required: false
+  AWSAccessKeyID: 
+    description: 'The AWS API access key id'
+    required: true
+  AWSSecretAccessKey: 
+    description: 'The AWS API secret access key'
+    required: true
+outputs:
+  instancesWithMissingLabel:
+    description: 'A JSON repesentation of instances with missing labels'
+  instancesToStop:
+    description: 'A JSON repesentation of instances with which should be stopped'
+  instancesToStopSoon:
+    description: 'A JSON repesentation of instances with which should be stopped soon (based on param `defaultNotificationDelay`)'
+  instancesToTerminate:
+    description: 'A JSON repesentation of instances with which should be terminated'
+  instancesToTerminateSoon:
+    description: 'A JSON repesentation of instances with which should be terminated soon (based on param `defaultTerminateDelay`)'
+runs:
+  using: 'node12'
+  main: 'index.js'
