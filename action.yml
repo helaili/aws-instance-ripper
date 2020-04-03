@@ -17,6 +17,10 @@ inputs:
   AWSSecretAccessKey: 
     description: 'The AWS API secret access key'
     required: true
+  dryRun: 
+    description: 'Set the AWS API DryRun mode. If set to `true`, nothing happens'
+    required: false
+    default: 'false'
 outputs:
   report:
     description: 'A JSON object with details on each offending instance'

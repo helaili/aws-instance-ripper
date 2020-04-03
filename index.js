@@ -12,6 +12,7 @@ try {
 
   const dryRun = true
 
+  core.debug(`dryRun: ${core.getInput('dryRun')}`)
   core.debug(`defaultNotificationDelay: ${defaultNotificationDelay}`)
   core.debug(`defaultStopDelay: ${defaultStopDelay}`)
   core.debug(`defaultTerminateDelay: ${defaultTerminateDelay}`)
