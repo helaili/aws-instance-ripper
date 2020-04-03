@@ -33,7 +33,7 @@ function processInstance (instance, ripperConfig) {
     reportInstance = true
   }
 
-  if (!isDateSet(terminate)) {
+  if (!isDateSet(reportData.terminate.value)) {
     core.debug(`Terminate date not set`)
     reportInstance = true
     reportData.terminate.notSet = true
@@ -50,7 +50,7 @@ function processInstance (instance, ripperConfig) {
     } 
   } 
   
-  if (!isDateSet(stop)) {
+  if (!isDateSet(reportData.stop.value)) {
     core.debug(`Stop date not set`)
     reportInstance = true
     reportData.stop.notSet = true
