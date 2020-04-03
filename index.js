@@ -8,6 +8,7 @@ try {
   const defaultTerminateDelay = core.getInput('defaultTerminateDelay')
   const AWSAccessKeyID = core.getInput('AWSAccessKeyID')
   const AWSSecretAccessKey = core.getInput('AWSSecretAccessKey')
+  const reportData = {}
 
   core.debug(`defaultNotificationDelay: ${defaultNotificationDelay}`)
   core.debug(`defaultStopDelay: ${defaultStopDelay}`)
@@ -53,7 +54,17 @@ try {
             instances.Reservations.forEach(reservation => {
               // Reservations can hold serveral instances 
               reservation.Instances.forEach(instance => {
-                ripper.processInstance(instance, ripperConfig)
+                const reportedInstance = ripper.processInstance(instance, ripperConfig)
+                
+                if (reportedInstance) {
+                  if(!reportData[region.RegionName]) {
+                    reportData[region.RegionName] = []
+                  }
+                  reportData[region.RegionName].push(reportedInstance)
+                  if (reportedInstance.tags) {
+                    updateTags(ec2Regional, reportedInstance, true)
+                  }
+                }
               })
             })  
           }
@@ -71,4 +82,23 @@ try {
   */
 } catch (error) {
   core.setFailed(error.message);
+}
+
+
+function updateTags(ec2Client, reportedInstance, dryRun) {
+  const tagData = {
+    Resources: [
+      reportedInstance.instanceId
+    ],
+    Tags: reportedInstance.tags,
+    DryRun: dryRun
+  }
+
+  ec2Client.createTags(tagData, (tagError, tagResponse) => {
+    if (tagError) {
+      core.error(tagError)
+    } else {
+      core.debug(`Succesfully created tags: ${tagResponse}`)
+    }
+  })
 }
