@@ -98,7 +98,7 @@ function updateTags(ec2Client, reportedInstance, dryRun) {
 
   ec2Client.createTags(tagData, (tagError, tagResponse) => {
     if (tagError) {
-      core.error(tagError)
+      core.error(`Failed creating tag: ${tagError}`)
     } else {
       core.debug(`Succesfully created tags: ${tagResponse}`)
     }
