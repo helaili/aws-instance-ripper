@@ -29,7 +29,7 @@ function getTag (instance, tag) {
 }
 
 function isDateSet(date) {
-  return !(!terminate || terminate.toUpperCase() !== 'NEVER' || !moment(terminate).isValid()) 
+  return !(!date || date.toUpperCase() !== 'NEVER' || !moment(date).isValid()) 
 }
 
 module.exports = { processInstance }
