@@ -1,5 +1,5 @@
 const core = require('@actions/core')
-const github = require('@actions/github')
+const AWS = require('aws-sdk')
 
 try {
   const defaultNotificationDelay = core.getInput('defaultNotificationDelay')
@@ -12,11 +12,23 @@ try {
   core.debug(`defaultStopDelay: ${defaultStopDelay}`)
   core.debug(`defaultTerminateDelay: ${defaultTerminateDelay}`)
 
-  if (AWSAccessKeyID) {
-    core.debug(`Found it ${AWSAccessKeyID}`)
-  } else {
-    core.debug('Not found')
+  let ec2Config = { 
+    region: 'us-east-1',
+    accessKeyId: AWSAccessKeyID,
+    secretAccessKey: AWSSecretAccessKey
   }
+  let ec2Global = new AWS.EC2(ec2Config)
+
+  /*
+   * Looping through all the regions 
+   */
+  ec2Global.describeRegions({}, (regionsErr, regions) => {
+    if (regionsErr) {
+      core.setFailed(regionsErr)
+    } else {
+      core.debug(`Retrieved the following regions: ${regions}`)
+    }
+  })
 
   /* 
   core.setOutput('instancesWithMissingLabel', '')
