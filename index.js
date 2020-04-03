@@ -94,6 +94,8 @@ function updateTags(ec2Client, reportedInstance, dryRun) {
     DryRun: dryRun
   }
 
+  core.debug(`Saving tags ${JSON.stringify(tagData)}`)
+
   ec2Client.createTags(tagData, (tagError, tagResponse) => {
     if (tagError) {
       core.error(tagError)
