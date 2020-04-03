@@ -10,6 +10,8 @@ try {
   const AWSSecretAccessKey = core.getInput('AWSSecretAccessKey')
   const reportData = {}
 
+  const dryRun = true
+
   core.debug(`defaultNotificationDelay: ${defaultNotificationDelay}`)
   core.debug(`defaultStopDelay: ${defaultStopDelay}`)
   core.debug(`defaultTerminateDelay: ${defaultTerminateDelay}`)
@@ -57,12 +59,25 @@ try {
                 const reportedInstance = ripper.processInstance(instance, ripperConfig)
                 
                 if (reportedInstance) {
+                  // Region doesn't have any reported instance yet
                   if(!reportData[region.RegionName]) {
                     reportData[region.RegionName] = []
                   }
                   reportData[region.RegionName].push(reportedInstance)
-                  if (reportedInstance.tags) {
-                    updateTags(ec2Regional, reportedInstance, true)
+                  
+                  if (reportedInstance.terminate.now) {
+                    // Let's terminate this one
+                    terminateInstance(ec2Regional, reportedInstance, dryRun)
+                  } else {
+                    //  We didn't terminate the instance, we might need to stop and/or set tags
+                    if (reportedInstance.stop.now) {
+                      stopInstance(ec2Regional, reportedInstance, dryRun)
+                    }
+
+                    if (reportedInstance.tags) {
+                      // There are tags to update on this instance
+                      updateTags(ec2Regional, reportedInstance, dryRun)
+                    }
                   }
                 }
               })
@@ -84,7 +99,6 @@ try {
   core.setFailed(error.message);
 }
 
-
 function updateTags(ec2Client, reportedInstance, dryRun) {
   const tagData = {
     Resources: [
@@ -101,6 +115,46 @@ function updateTags(ec2Client, reportedInstance, dryRun) {
       core.error(`Failed creating tag: ${tagError}`)
     } else {
       core.debug(`Succesfully created tags: ${tagResponse}`)
+    }
+  })
+}
+
+/*
+ * Terminate the instance one by one. We could batch this in the future to save API calls
+ */
+function terminateInstance(ec2Client, reportedInstance, dryRun) {
+  let argObj = {
+    InstanceIds: [
+      reportedInstance.instanceId
+    ],
+    DryRun: dryRun
+  }
+
+  ec2Client.terminateInstances(argObj, function(err, data) {
+    if (err) {
+      core.error(`Failed terminating instance: ${err}`)
+    } else {
+      core.debug(`Succesfully terminated instance: ${data}`)
+    }
+  })
+}
+
+/*
+ * Stop the instance one by one. We could batch this in the future to save API calls
+ */
+function stopInstance(ec2Client, reportedInstance, dryRun) {
+  let argObj = {
+    InstanceIds: [
+      reportedInstance.instanceId
+    ],
+    DryRun: dryRun
+  }
+
+  ec2Client.stopInstances(argObj, function(err, data) {
+    if (err) {
+      core.error(`Failed stopping instance: ${err}`)
+    } else {
+      core.debug(`Succesfully stopped instance: ${data}`)
     }
   })
 }
