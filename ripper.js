@@ -79,7 +79,7 @@ function processInstance (instance, ripperConfig) {
   }
 
    // Stop date was origininally set or got set with the default stop date
-   if (isDateSet(reportData.stop.value) && reportData.stop.valuetoUpperCase() !== 'NEVER') {
+   if (isDateSet(reportData.stop.value) && reportData.stop.value.toUpperCase() !== 'NEVER') {
     if (moment(reportData.stop.value).isSameOrAfter(moment(), 'day')) {
       reportInstance = true
       reportData.stop.now = true
