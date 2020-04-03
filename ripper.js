@@ -29,7 +29,13 @@ function getTag (instance, tag) {
 }
 
 function isDateSet(date) {
-  return !(!date || date.toUpperCase() !== 'NEVER' || !moment(date).isValid()) 
+  if (!date) {
+    return false
+  } else if (date.toUpperCase() === 'NEVER') {
+    return true
+  } else {
+    return moment(date).isValid()
+  }
 }
 
 module.exports = { processInstance }
