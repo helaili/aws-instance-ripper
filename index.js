@@ -13,7 +13,13 @@ try {
   core.debug(`defaultStopDelay: ${defaultStopDelay}`)
   core.debug(`defaultTerminateDelay: ${defaultTerminateDelay}`)
 
-  let ec2Config = { 
+  const ripperConfig = {
+    defaultNotificationDelay: defaultNotificationDelay,
+    defaultStopDelay: defaultStopDelay,
+    defaultTerminateDelay: defaultTerminateDelay
+  }
+
+  const ec2Config = { 
     region: 'us-east-1',
     accessKeyId: AWSAccessKeyID,
     secretAccessKey: AWSSecretAccessKey
@@ -27,7 +33,7 @@ try {
     if (regionsErr) {
       core.setFailed(regionsErr)
     } else {
-      core.debug(`Retrieved ${regions.length} AWS regions`)
+      core.debug(`Retrieved ${regions.Regions.length} AWS regions`)
 
       /*
        * Now iterating through each region
@@ -47,7 +53,7 @@ try {
             instances.Reservations.forEach(reservation => {
               // Reservations can hold serveral instances 
               reservation.Instances.forEach(instance => {
-                ripper.processInstance(instance)
+                ripper.processInstance(instance, ripperConfig)
               })
             })  
           }
