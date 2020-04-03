@@ -10,13 +10,13 @@ try {
   const AWSSecretAccessKey = core.getInput('AWSSecretAccessKey')
   const reportData = {}
 
-  const dryRun = true
+  const dryRun = core.getInput('dryRun') === true || core.getInput('dryRun') === 'true'
 
-  core.debug(`dryRun:${core.getInput('dryRun')} =  ${core.getInput('dryRun') === true || core.getInput('dryRun') === 'true'}`)
   core.debug(`defaultNotificationDelay: ${defaultNotificationDelay}`)
   core.debug(`defaultStopDelay: ${defaultStopDelay}`)
   core.debug(`defaultTerminateDelay: ${defaultTerminateDelay}`)
-
+  core.debug(`dryRun: ${dryRun}`)
+  
   const ripperConfig = {
     defaultNotificationDelay: defaultNotificationDelay,
     defaultStopDelay: defaultStopDelay,
