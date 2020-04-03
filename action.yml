@@ -18,16 +18,8 @@ inputs:
     description: 'The AWS API secret access key'
     required: true
 outputs:
-  instancesWithMissingLabel:
-    description: 'A JSON repesentation of instances with missing labels'
-  instancesToStop:
-    description: 'A JSON repesentation of instances with which should be stopped'
-  instancesToStopSoon:
-    description: 'A JSON repesentation of instances with which should be stopped soon (based on param `defaultNotificationDelay`)'
-  instancesToTerminate:
-    description: 'A JSON repesentation of instances with which should be terminated'
-  instancesToTerminateSoon:
-    description: 'A JSON repesentation of instances with which should be terminated soon (based on param `defaultTerminateDelay`)'
+  report:
+    description: 'A JSON object with details on each offending instance'
 runs:
   using: 'node12'
   main: 'index.js'

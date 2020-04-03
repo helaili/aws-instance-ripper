@@ -11,8 +11,12 @@ jobs:
       uses: actions/checkout@v2
     - name: AWS Ripper
       uses: ./
+      id: ripper
       with:
         AWSAccessKeyID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWSSecretAccessKey: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         defaultStopDelay: 21
         defaultTerminateDelay: 28
+    - name: Echo
+      run: |
+        echo ${{ steps.ripper.outputs.report }}
