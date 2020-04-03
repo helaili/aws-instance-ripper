@@ -17,7 +17,7 @@ jobs:
         AWSSecretAccessKey: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         defaultStopDelay: 21
         defaultTerminateDelay: 28
-        dryRun: 'true'
+        dryRun: false
     - name: Echo
       run: |
         echo ${{ steps.ripper.outputs.report }}
