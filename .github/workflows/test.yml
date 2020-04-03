@@ -21,3 +21,8 @@ jobs:
     - name: Echo
       run: |
         echo ${{ steps.ripper.outputs.report }}
+    - name: AWS Ripper Reporting
+      uses: helaili/aws-instance-ripper-issue-reporter@13f76e1 
+      with:
+        data: ${{ steps.ripper.outputs.report }}
+    
