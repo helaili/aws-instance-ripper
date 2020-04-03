@@ -55,7 +55,7 @@ function processInstance (instance, ripperConfig) {
     if (moment(reportData.terminate.value).isSameOrAfter(moment(), 'day')) {
       reportInstance = true
       reportData.terminate.now = true
-    } else if (moment(reportData.terminate.value).substract(ripperConfig.defaultNotificationDelay).isBefore(moment(), 'day')) {
+    } else if (moment(reportData.terminate.value).subtract(ripperConfig.defaultNotificationDelay).isBefore(moment(), 'day')) {
       reportInstance = true
       reportData.terminate.warning = true
     }
@@ -83,7 +83,7 @@ function processInstance (instance, ripperConfig) {
     if (moment(reportData.stop.value).isSameOrAfter(moment(), 'day')) {
       reportInstance = true
       reportData.stop.now = true
-    } else if (moment(reportData.stop.value).substract(ripperConfig.defaultNotificationDelay).isBefore(moment(), 'day')) {
+    } else if (moment(reportData.stop.value).subtract(ripperConfig.defaultNotificationDelay).isBefore(moment(), 'day')) {
       reportInstance = true
       reportData.stop.warning = true
     }
