@@ -1,0 +1,30 @@
+{
+  "name": "aws-instance-ripper-issue-reporter",
+  "version": "2.0.0",
+  "description": "GitHub Actions to display the report from the aws-instance-ripper action as an issue comment",
+  "main": "entrypoint.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node entrypoint.js > test.md"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/helaili/aws-instance-ripper-issue-reporter.git"
+  },
+  "keywords": [
+    "github-action",
+    "actions",
+    "aws"
+  ],
+  "author": "Alain Hélaïli",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/helaili/aws-instance-ripper-issue-reporter/issues"
+  },
+  "homepage": "https://github.com/helaili/aws-instance-ripper-issue-reporter",
+  "dependencies": {
+    "@actions/core": "^1.2.3",
+    "@actions/github": "^2.1.1",
+    "actions-toolkit": "2.0.0"
+  }
+}
