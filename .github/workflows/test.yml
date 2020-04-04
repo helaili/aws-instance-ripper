@@ -18,11 +18,10 @@ jobs:
         query: .github/queries/pinnedissues.query.yaml
         accept: application/vnd.github.elektra-preview+json
         outputFile: pinnedIssues.json
-    - name: Echo Report
+    - name: Echo
       run: |
-        echo ${{ steps.listPinnedIssues.outputs.queryResult }}
-        echo ${{ env.GITHUB_EVENT_PATH }}
-        cat ${{ env.GITHUB_EVENT_PATH }}
+        echo "$GITHUB_EVENT_PATH"
+        cat "$GITHUB_EVENT_PATH"
     - name: Unpin Issues
       uses: helaili/github-graphql-action@2.0.1
       env:
