@@ -10,7 +10,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
     - name: AWS Ripper
-      uses: ./
+      uses: ./ripper
       id: ripper
       with:
         AWSAccessKeyID: ${{ secrets.AWS_ACCESS_KEY_ID }}
@@ -22,7 +22,7 @@ jobs:
       run: |
         echo ${{ steps.ripper.outputs.report }}
     - name: AWS Ripper Reporting
-      uses: helaili/aws-instance-ripper-issue-reporter@13f76e1 
+      uses: ./reporter 
       with:
         data: ${{ steps.ripper.outputs.report }}
     
