@@ -1,0 +1,193 @@
+name: Test
+
+on:
+  push
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Find previous issues
+      id: findIssues
+      uses: actions/github-script@0.9.0
+      with:
+        github-token: ${{secrets.GITHUB_TOKEN}}
+        query: '
+          query($owner:String!, $name:String!, $label:String!) {
+            repository(owner:$owner, name:$name) {
+              issues(first:100, labels: [$label]) {
+                nodes {
+                  id
+                }
+              }
+            }
+          }'
+        label: AWS
+        script: |
+          const variables = {
+            owner: context.repo.owner,
+            name: context.repo.repo,
+            label: core.getInput('label')
+          }
+          const result = await github.graphql(core.getInput('query'), variables)
+          if (!result) {
+            core.setFailed('GraphQL request failed')
+          } else {
+            return result
+          }
+    - name: Close previous issues
+      uses: actions/github-script@0.9.0
+      with:
+        github-token: ${{secrets.GITHUB_TOKEN}}
+        query: '
+          mutation unpinIssue($issueId: ID!){
+            closeIssue(input: { issueId: $issueId }) {
+              issue {
+                repository {
+                  id
+                }
+              }
+            }
+          }'
+        issues: ${{ steps.findIssues.outputs.result }}
+        script: |
+          if (core.getInput('issues')) {
+            const jsonObj = JSON.parse(core.getInput('issues'))
+            
+            for (const issue of jsonObj.repository.issues.nodes) {
+              const variables = {
+                issueId: issue.id
+              }
+              const result = await github.graphql(core.getInput('query'), variables)
+              if (!result) {
+                core.setFailed('GraphQL request failed')
+              } 
+            } 
+          }
+    - name: AWS Ripper
+      uses: ./ripper
+      id: ripper
+      with:
+        AWSAccessKeyID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWSSecretAccessKey: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        defaultStopDelay: 21
+        defaultTerminateDelay: 28
+        dryRun: true
+    - name: AWS Ripper Reporting
+      uses: ./reporter 
+      id: reporter
+      with:
+        data: ${{ steps.ripper.outputs.report }}
+        token: ${{ secrets.GITHUB_TOKEN }}
+        label: AWS
+    - name: Find pinned issues
+      id: pinnedIssues
+      uses: actions/github-script@0.9.0
+      with:
+        github-token: ${{secrets.GITHUB_TOKEN}}
+        query: '
+          query($owner:String!, $name:String!) {
+            repository(owner:$owner, name:$name) {
+              pinnedIssues(first:3) {
+                nodes {
+                  issue {
+                    id
+                    number
+                    labels (first: 10) {
+                      nodes {
+                        name
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }'
+        script: |
+          const variables = {
+            owner: context.repo.owner,
+            name: context.repo.repo,
+            headers: {
+              Accept: `application/vnd.github.elektra-preview+json`
+            }
+          }
+          const result = await github.graphql(core.getInput('query'), variables)
+          if (!result) {
+            core.setFailed('GraphQL request failed')
+          } else {
+            return result
+          }
+    - name: Unpin issues
+      id: unpinIssues
+      uses: actions/github-script@0.9.0
+      with:
+        github-token: ${{secrets.GITHUB_TOKEN}}
+        issues: ${{ steps.pinnedIssues.outputs.result }}
+        label: 'AWS'
+        query: '
+          mutation unpinIssue($issueId: ID!){
+            unpinIssue(input: { issueId: $issueId }) {
+              issue {
+                repository {
+                  id
+                }
+              }
+            }
+          }'
+        script: |
+          const labelToUnpin = core.getInput('label')
+          
+          if (core.getInput('issues')) {
+            const pinnedIssues = JSON.parse(core.getInput('issues'))
+            
+            for (const issue of pinnedIssues.repository.pinnedIssues.nodes) {
+              const labels = issue.issue.labels.nodes
+              
+              for (const label of labels) {
+                if (label.name === labelToUnpin) {
+                  const variables = {
+                    issueId: issue.issue.id,
+                    headers: {
+                      Accept: `application/vnd.github.elektra-preview+json`
+                    }
+                  }
+
+                  const result = await github.graphql(core.getInput('query'), variables)
+                  if (!result) {
+                    core.setFailed('GraphQL request failed')
+                  }   
+
+                  break
+                }
+              }
+            }
+          }
+    - name: Pin issue
+      uses: actions/github-script@0.9.0
+      with:
+        github-token: ${{secrets.GITHUB_TOKEN}}
+        query: '
+          mutation pinIssue($issueId: ID!){
+            pinIssue(input: { issueId: $issueId }) {
+              issue {
+                repository {
+                  id
+                }
+              }
+            }
+          }'
+        issue: ${{ steps.reporter.outputs.issue }}
+        script: |
+          const variables = {
+            issueId: core.getInput('issue'),
+            headers: {
+              Accept: `application/vnd.github.elektra-preview+json`
+            }
+          }
+          const result = await github.graphql(core.getInput('query'), variables)
+          if (!result) {
+            core.setFailed('GraphQL request failed')
+          }
+    

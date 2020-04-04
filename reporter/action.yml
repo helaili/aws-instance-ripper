@@ -1,0 +1,21 @@
+name: 'AWS Instance Ripper Reporter'
+description: 'GitHub Actions to display the report from the aws-instance-ripper action as an issue comment'
+inputs:
+  data:  
+    description: 'The data to print'
+    required: true
+  token: 
+    description: 'The GITHUB_TOKEN secret'
+    required: true
+  label: 
+    description: 'The label to add to the reporting issue'
+    required: false
+outputs:
+  issue:
+    description: 'ID of the issue that was created'
+runs:
+  using: 'node12'
+  main: 'index.js'
+branding:
+  icon: 'cloud-lightning'  
+  color: 'red'

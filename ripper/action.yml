@@ -1,0 +1,32 @@
+name: 'AWS Instance Ripper'
+description: 'Keep your AWS usage under control'
+inputs:
+  defaultNotificationDelay:  
+    description: 'Start warning about stopping when the date is close enough'
+    required: true
+    default: '15'
+  defaultStopDelay:  
+    description: 'When Stop is not provided, how many days in the future should this value be set to'
+    required: false
+  defaultTerminateDelay:  
+    description: 'When Terminate is not provided, how many days in the future should this value be set to'
+    required: false
+  AWSAccessKeyID: 
+    description: 'The AWS API access key id'
+    required: true
+  AWSSecretAccessKey: 
+    description: 'The AWS API secret access key'
+    required: true
+  dryRun: 
+    description: 'Set the AWS API DryRun mode. If set to `true`, nothing happens'
+    required: false
+    default: 'false'
+outputs:
+  report:
+    description: 'A JSON object with details on each offending instance'
+runs:
+  using: 'node12'
+  main: 'index.js'
+branding:
+  icon: 'cloud-lightning'  
+  color: 'red'
