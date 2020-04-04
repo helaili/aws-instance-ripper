@@ -21,6 +21,7 @@ jobs:
     - name: Echo Report
       run: |
         echo ${{ steps.listPinnedIssues.outputs.queryResult }}
+        echo ${{ env.GITHUB_EVENT_PATH }}
         cat ${{ env.GITHUB_EVENT_PATH }}
     - name: Unpin Issues
       uses: helaili/github-graphql-action@2.0.1
