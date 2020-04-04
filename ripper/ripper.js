@@ -52,7 +52,7 @@ function processInstance (instance, ripperConfig) {
 
   // Terminate date was origininally set or got set with the default termination date
   if (isDateSet(reportData.terminate.value) && reportData.terminate.value.toUpperCase() !== 'NEVER') {
-    if (moment(reportData.terminate.value).isSameOrAfter(moment(), 'day')) {
+    if (moment(reportData.terminate.value).isSameOrBefore(moment(), 'day')) {
       reportInstance = true
       reportData.terminate.now = true
     } else if (moment(reportData.terminate.value).subtract(ripperConfig.defaultNotificationDelay).isBefore(moment(), 'day')) {
@@ -80,7 +80,7 @@ function processInstance (instance, ripperConfig) {
 
    // Stop date was origininally set or got set with the default stop date
    if (isDateSet(reportData.stop.value) && reportData.stop.value.toUpperCase() !== 'NEVER') {
-    if (moment(reportData.stop.value).isSameOrAfter(moment(), 'day')) {
+    if (moment(reportData.stop.value).isSameOrBefore(moment(), 'day')) {
       reportInstance = true
       reportData.stop.now = true
     } else if (moment(reportData.stop.value).subtract(ripperConfig.defaultNotificationDelay).isBefore(moment(), 'day')) {
