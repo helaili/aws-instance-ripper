@@ -1,42 +1,45 @@
 const core = require('@actions/core')
 const github = require('@actions/github')
 
-try {
-  const ghToken = core.getInput('token')
-  const octokit = new github.GitHub(ghToken)
-  const context = github.context
+async function run() {
+  try {
+    const ghToken = core.getInput('token')
+    const octokit = new github.GitHub(ghToken)
+    const context = github.context
 
-  const data = JSON.parse(core.getInput('data'))
-  const regions = Object.getOwnPropertyNames(data)
-  let report = ''
-  const labels = []
-  
-  if (core.getInput('label')) {
-    labels.push(core.getInput('label'))
-  }
-
-  if (regions) {
-    for (const region of regions) {
-      core.debug(`Processing ${region}`)
-      let regionTable = generateRegionTable(data[region])
-      report = report.concat(`### [${region}](https://console.aws.amazon.com/ec2/v2/home?region=${region}#Instances:sort=tag:Name)\n${regionTable}\n`)
+    const data = JSON.parse(core.getInput('data'))
+    const regions = Object.getOwnPropertyNames(data)
+    let report = ''
+    const labels = []
+    
+    if (core.getInput('label')) {
+      labels.push(core.getInput('label'))
     }
 
-    octokit.issues.create({
-      ...context.repo,
-      title: 'AWS Ripper report',
-      body: report,
-      labels: labels
-    })
-  } else {
-    core.warning('Nothing to report')
+    if (regions) {
+      for (const region of regions) {
+        core.debug(`Processing ${region}`)
+        let regionTable = generateRegionTable(data[region])
+        report = report.concat(`### [${region}](https://console.aws.amazon.com/ec2/v2/home?region=${region}#Instances:sort=tag:Name)\n${regionTable}\n`)
+      }
+
+      core.debug(report)
+
+      const { data: issue }  = await octokit.issues.create({
+        ...context.repo,
+        title: 'AWS Ripper report',
+        body: report,
+        labels: labels
+      })
+      
+      core.setOutput('issue', `${issue.node_id}`)  
+    } else {
+      core.warning('Nothing to report')
+    }
+  } catch (error) {
+    core.setFailed(error.message)
   }
-
-  core.debug(report)
-} catch (error) {
-  core.setFailed(error.message);
 }
-
 
 function generateRegionTable(reportData) {
   let markdownTable = null
@@ -97,3 +100,5 @@ function formatTerminate(instance) {
     return date
   }
 }
+
+run()

@@ -10,6 +10,9 @@ inputs:
   label: 
     description: 'The label to add to the reporting issue'
     required: false
+outputs:
+  issue:
+    description: 'ID of the issue that was created'
 runs:
   using: 'node12'
   main: 'index.js'
