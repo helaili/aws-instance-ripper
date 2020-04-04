@@ -27,7 +27,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        query: .github/queries/unpinissue.query.yaml$
+        query: .github/queries/unpinissue.query.yaml
         accept: application/vnd.github.elektra-preview+json
     - name: AWS Ripper
       uses: ./ripper
