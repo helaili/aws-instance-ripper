@@ -4,6 +4,12 @@ inputs:
   data:  
     description: 'The data to print'
     required: true
+  token: 
+    description: 'The GITHUB_TOKEN secret'
+    required: true
+  label: 
+    description: 'The label to add to the reporting issue'
+    required: false
 runs:
   using: 'node12'
   main: 'index.js'
