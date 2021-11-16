@@ -24,7 +24,7 @@
   "homepage": "https://github.com/helaili/aws-instance-ripper",
   "dependencies": {
     "@actions/core": "^1.2.3",
-    "aws-sdk": "^2.653.0",
+    "aws-sdk": "^2.814.0",
     "moment": "^2.24.0"
   }
 }
