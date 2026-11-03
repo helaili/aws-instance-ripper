@@ -35,7 +35,7 @@ try {
    */
   ec2Global.describeRegions({}, (regionsErr, regions) => {
     if (regionsErr) {
-      core.setFailed(regionsErr)
+      core.setFailed(regionsErr.message || String(regionsErr))
     } else {
       core.debug(`Retrieved ${regions.Regions.length} AWS regions`)
 
@@ -91,7 +91,7 @@ try {
     }
   })
 } catch (error) {
-  core.setFailed(error.message);
+  core.setFailed(error.message || String(error));
 }
 
 /*
